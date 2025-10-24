@@ -1,8 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image'; // For optimized images in Next.js
+import Image from 'next/image';
 
-// Define the type for a single card's data
 interface CardData {
   id: string;
   imageSrc: string;
@@ -10,64 +9,88 @@ interface CardData {
   description: string;
 }
 
-// Define props for the Carousel component
 interface CardCarouselProps {
-  cards: CardData[]; // Array of card data to display
-  scrollSpeed?: number; // Optional: speed of the carousel in ms per 100px (higher value = slower)
+  cards: CardData[];
+  scrollSpeed?: number;
 }
 
 const CardCarousel: React.FC<CardCarouselProps> = ({ cards, scrollSpeed = 50 }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
+  // useRef to keep track of the last animation frame timestamp
+  const lastTimestampRef = useRef<DOMHighResTimeStamp>(0);
+  // useRef to store the animation frame ID
+  const animationFrameIdRef = useRef<number | null>(null);
+  // useRef to store the current scroll position
+  const currentScrollRef = useRef<number>(0);
+
   useEffect(() => {
     const carouselElement = carouselRef.current;
     if (!carouselElement) return;
 
-    let animationFrameId: number;
-    let startTime: DOMHighResTimeStamp;
-    let currentScroll = 0;
+    // We'll calculate the total width of one set of original cards
+    // This is a bit tricky without rendering, so we'll rely on scrollWidth / 2 initially
+    // or estimate it based on card width + gap. For now, scrollWidth / 2 is a good approximation.
+    const getEffectiveMaxScroll = () => {
+        // Assume all cards have same width (w-80 = 320px) and space-x-6 (24px)
+        const cardWidth = 320;
+        const gapWidth = 24;
+        // Total width of one set of cards, including gaps.
+        // Last card doesn't have a gap after it in the sequence.
+        const oneSetWidth = cards.length * cardWidth + (cards.length > 0 ? (cards.length -1) * gapWidth : 0);
+        return oneSetWidth;
+    };
+    
+    // The actual scroll distance before content repeats for an infinite loop
+    // Using oneSetWidth for a more accurate reset point.
+    const resetPoint = getEffectiveMaxScroll();
+
 
     const animateScroll = (timestamp: DOMHighResTimeStamp) => {
-      if (!startTime) startTime = timestamp;
-      const elapsedTime = timestamp - startTime;
-
+      // Only proceed if not paused
       if (!isPaused) {
-        // Calculate scroll amount based on elapsed time and speed
-        // This makes the scroll speed consistent regardless of frame rate
-        const scrollAmount = (elapsedTime / scrollSpeed); // Adjust denominator for speed control
+        // Calculate elapsed time since the last frame
+        const deltaTime = timestamp - lastTimestampRef.current;
+        
+        // Ensure deltaTime is not too large (e.g., if tab was inactive)
+        const clampedDeltaTime = Math.min(deltaTime, 100); // Max 100ms to prevent huge jumps
 
-        currentScroll += scrollAmount;
+        // Calculate scroll amount. Higher scrollSpeed value = slower scroll
+        const scrollAmount = (clampedDeltaTime / scrollSpeed);
 
-        // Reset scroll position when it reaches the end to create an infinite loop
-        // We'll duplicate the cards visually for a smoother infinite loop effect
-        // The actual scrollWidth might include duplicated items, so we need careful calculation
-        // A simpler approach for continuous scroll is to just translate and reset
-        
-        // For a seamless loop, we need to clone elements.
-        // A simpler CSS-only approach for infinite scroll is often better for performance,
-        // but for hover-pause with JS control, we manage it here.
-        
-        // For demonstration, let's just scroll and reset without perfect cloning for simplicity.
-        // For production, consider duplicating `cards` array or using a library.
-        
-        const maxScroll = carouselElement.scrollWidth / 2; // Rough estimate if content is duplicated
-        if (currentScroll >= maxScroll) {
-          currentScroll = 0; // Reset
+        currentScrollRef.current += scrollAmount;
+
+        // Reset scroll position for infinite loop effect
+        // If the scroll position has passed the width of one set of original cards, reset it.
+        if (currentScrollRef.current >= resetPoint) {
+            currentScrollRef.current -= resetPoint; // Subtract one full set's width
+            // A more robust reset might be currentScrollRef.current = currentScrollRef.current % resetPoint;
         }
-        carouselElement.scrollLeft = currentScroll;
+        
+        carouselElement.scrollLeft = currentScrollRef.current;
       }
-      startTime = timestamp; // Reset start time for next frame
-      animationFrameId = requestAnimationFrame(animateScroll);
+      
+      // Always update lastTimestampRef for the next frame calculation
+      lastTimestampRef.current = timestamp;
+
+      // Request the next frame
+      animationFrameIdRef.current = requestAnimationFrame(animateScroll);
     };
 
-    animationFrameId = requestAnimationFrame(animateScroll);
+    // Start the animation
+    animationFrameIdRef.current = requestAnimationFrame(animateScroll);
 
+    // Cleanup function
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameIdRef.current !== null) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+      }
     };
-  }, [isPaused, scrollSpeed, cards.length]); // Depend on isPaused and scrollSpeed
+  }, [isPaused, scrollSpeed, cards.length]); // Re-run if paused state, speed, or number of cards changes
 
+
+  // Handlers for mouse events
   const handleMouseEnter = () => {
     setIsPaused(true);
   };
@@ -78,11 +101,10 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, scrollSpeed = 50 }) 
 
   const handleCardClick = (card: CardData) => {
     alert(`You clicked on: ${card.description} (ID: ${card.id})`);
-    // In a real application, you might open a modal here, or navigate:
-    // router.push(`/cards/${card.id}`);
+    // Example: router.push(`/cards/${card.id}`);
   };
 
-  // Duplicate cards to create a seamless infinite scroll effect
+  // Duplicate cards for seamless infinite scroll
   const duplicatedCards = [...cards, ...cards]; 
 
   return (
@@ -93,10 +115,11 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, scrollSpeed = 50 }) 
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Render duplicated cards */}
         {duplicatedCards.map((card, index) => (
           <div
-            key={`${card.id}-${index}`} // Use a combined key for duplicated items
-            className="flex-shrink-0 w-80 border rounded-lg shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-300 ease-in-out"
+            key={`${card.id}-${index}`}
+            className="flex-shrink-0 w-80 border border-[1/2px] rounded-lg shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={() => handleCardClick(card)}
           >
             <div className="relative w-full h-48">

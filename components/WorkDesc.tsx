@@ -24,7 +24,7 @@ export default function WorkDesc() {
             </h1>
           </div>
           <div>
-            <CardCarousel cards={dummyCards} scrollSpeed={20} />
+            <CardCarousel cards={dummyCards} scrollSpeed={20}/>
           </div>
         </main>
 
