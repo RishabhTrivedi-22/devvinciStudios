@@ -2,7 +2,7 @@ import ThemeToggle from "./pgComponents/ThemeToggle";
 export default function Hero() {
   return (
     <>
-      <div className=" min-h-screen flex flex-col font-sans px-4 sm:px-8 md:px-16 py-8 overflow-x-clip">
+      <div className=" min-h-screen flex flex-col font-sans pb-8 overflow-x-clip">
         <header className="w-full">
           <nav className="flex justify-between md:justify-center lg:justify-center lg:space-x-34 items-center md:space-x-8 ">
             <a
@@ -44,7 +44,7 @@ export default function Hero() {
 
           <div className="w-full lg:w-2/5 h-96 mt-16 lg:mt-0 relative">
             <img
-              src='/images/hero-2.png'
+              src="/images/hero-2.png"
               alt="Classical drawing of a male figure"
               className="absolute top-0 right-0 translate-x-1/4 lg:right-20 w-32 md:w-40 object-cover transform rotate-6 shadow-xl"
             />

@@ -15,7 +15,7 @@ export default function WorkDesc() {
   ];
   return (
     <>
-      <div className=" min-h-screen flex flex-col font-sans px-4 sm:px-8 md:px-16 pb-8 overflow-x-clip">
+      <div className=" min-h-screen flex flex-col font-sans pb-8 overflow-x-clip">
         <NavBar />
         <main className="flex-grow flex flex-col justify-between w-full max-w-7xl mx-auto pt-10 pb-20">
         <div className="w-full lg:w-3/5 flex-shrink-0 text-center lg:text-left">

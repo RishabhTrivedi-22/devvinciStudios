@@ -1,7 +1,7 @@
-
+import Link from "next/link";
 
 export default function NavBar() {
-  const navItems = ["WORKS", "STUDIO", "CONTACT", "FOLLOW"];
+  const navItems = ["works", "studio", "contact", "follow"];
   return (
     <>
       <header className="w-full">
@@ -11,9 +11,9 @@ export default function NavBar() {
           </div>
           <div className="hidden md:flex items-center lg:space-x-12 md:space-x-5 text-sm font-medium tracking-widest hover:opacity-70 transition-opacity">
             {navItems.map((item) => (
-              <a key={item} href="#">
+              <Link key={item} href={`${item}`} className="uppercase">
                 {item}
-              </a>
+              </Link>
             ))}
           </div>
         </nav>

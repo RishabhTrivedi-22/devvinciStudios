@@ -1,11 +1,12 @@
-import PgSection from "./pgComponents/PgSection";
-import NavBar from "./pgComponents/NavBar";
-import ThemeToggle from "./pgComponents/ThemeToggle";
+import NavBar from "@/components/pgComponents/NavBar";
+import PgSection from "@/components/pgComponents/PgSection"
+import ThemeToggle from "@/components/pgComponents/ThemeToggle";
+
 
 export default function AboutDesc() {
   return (
     <>
-      <div className=" min-h-screen flex flex-col font-sans pb-8 overflow-x-clip">
+      <div className=" min-h-screen flex flex-col font-sans px-4 sm:px-8 md:px-16 py-4 overflow-x-clip">
         <NavBar />
         <PgSection>
           <h1 className="font-serif text-4xl md:text-6xl lg:text-8xl font-normal leading-tight">
