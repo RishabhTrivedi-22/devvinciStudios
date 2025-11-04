@@ -1,48 +1,23 @@
-import ThemeToggle from "./pgComponents/ThemeToggle";
-export default function Hero() {
+
+import NavBar from './pgComponents/NavBar';
+
+export default function HeroSect() {
   return (
     <>
-      <div className=" min-h-screen flex flex-col font-sans pb-8 overflow-x-clip">
-        <header className="w-full">
-          <nav className="flex justify-between md:justify-center lg:justify-center lg:space-x-34 items-center md:space-x-8 ">
-            <a
-              href="#"
-              className="font-bold sm:text-xs md:text-lg md:tracking-widest hover:opacity-70 transition-opacity"
-            >
-              WORKS
-            </a>
-            <a
-              href="#"
-              className="font-bold sm:text-xs md:text-lg md:tracking-widest hover:opacity-70 transition-opacity"
-            >
-              STUDIO
-            </a>
-            <a
-              href="#"
-              className="font-bold sm:text-xs md:text-lg md:tracking-widest hover:opacity-70 transition-opacity"
-            >
-              CONTACT
-            </a>
-            <a
-              href="#"
-              className="font-bold sm:text-xs md:text-lg md:tracking-widest hover:opacity-70 transition-opacity"
-            >
-              FOLLOW
-            </a>
-          </nav>
-        </header>
+      <div className=" min-h-screen flex flex-col pb-8 overflow-x-clip">
+         <NavBar />
 
         <main className="flex-grow flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl mx-auto pt-10 pb-20">
-          <div className="w-full lg:w-3/5 flex-shrink-0 text-center lg:text-left z-20">
-            <h1 className="font-cormorant font-normal text-[18vw] sm:text-[15vw] md:text-[12vw] lg:text-[10rem] leading-[0.8] tracking-tighter">
+          <div className="w-full flex-shrink-0 text-center">
+            <h1 className="font-chill font-semibold text-[18vw] sm:text-[15vw] md:text-[12vw] lg:text-[10rem] leading-[0.8] tracking-tighter">
               DEVVINCI
             </h1>
-            <h2 className="font-cormorant font-normal text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8rem] leading-[0.8] tracking-tighter mt-2">
+            <h2 className="font-chill font-medium text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8rem] leading-[0.8] tracking-tighter mt-8">
               STUDIOS
             </h2>
           </div>
 
-          <div className="w-full lg:w-2/5 h-96 mt-16 lg:mt-0 relative">
+          {/* <div className="w-full lg:w-2/5 h-96 mt-16 lg:mt-0 relative">
             <img
               src="/images/hero-2.png"
               alt="Classical drawing of a male figure"
@@ -63,12 +38,12 @@ export default function Hero() {
               alt="Statue wearing a VR headset"
               className="absolute bottom-[-11rem] lg:-bottom-100 lg:-right-1/4 -translate-x-1/2 -translate-y-1/2 w-48 md:w-64 object-cover z-10 transform -rotate-3 shadow-2xl"
             />
-          </div>
+          </div> */}
         </main>
 
         <footer className="w-full flex items-center justify-between z-20">
           <div className="w-1/3">
-            <ThemeToggle />
+            
           </div>
 
           <div className="w-1/3 flex flex-col items-center justify-center">

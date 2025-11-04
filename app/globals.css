@@ -1,2 +1,6 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-chill: var(--font-Chillax);
+  --font-syn: var(--font-Synonym);
+}

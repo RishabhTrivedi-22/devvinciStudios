@@ -1,5 +1,5 @@
 import Desc from "@/components/AboutDesc";
-import Hero from "@/components/Hero";
+import Hero from "@/components/HeroSect";
 import Main from "@/components/Main";
 import WorkDesc from "@/components/WorkDesc";
 

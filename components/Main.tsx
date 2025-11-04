@@ -1,15 +1,15 @@
-import Hero from "./Hero";
-import AboutDesc from "./AboutDesc"
+import AboutDesc from "./AboutDesc";
 import WorkDesc from "./WorkDesc";
+import HeroSect from "./HeroSect";
 
 export default function Main() {
   return (
     <>
-    <div className=" min-h-screen flex flex-col font-sans px-4 sm:px-8 md:px-16 py-8 overflow-x-clip">
-      <Hero />
-      <AboutDesc />
-      <WorkDesc />
-    </div>
+      <div className=" min-h-screen flex flex-col font-sans sm:px-8 md:px-16 py-4 overflow-x-clip">
+        <HeroSect />
+        <AboutDesc />
+        <WorkDesc />
+      </div>
     </>
   );
-};
+}
